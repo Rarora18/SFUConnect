@@ -78,9 +78,9 @@ export function CardsCarousel() {
 
   return (
     <Carousel
-      slideSize={{ base: '100%', sm: '50%' }}
+      slideSize="100%"
       slideGap={2}
-      emblaOptions={{ align: 'start', slidesToScroll: mobile ? 1 : 2 }}
+      emblaOptions={{ align: 'start', slidesToScroll: 1 }}
       nextControlProps={{ 'aria-label': 'Next slide' }}
       previousControlProps={{ 'aria-label': 'Previous slide' }}
     >
