@@ -11,6 +11,11 @@
   filter: sepia(0.25) saturate(0.9);
 }
 
+.cardContent {
+  width: 100%;
+  text-align: left;
+}
+
 .card::before {
   content: '';
   position: absolute;
@@ -34,8 +39,8 @@
 
 .category {
   color: #f7f1e6;
-  background: rgba(122, 91, 62, 0.75);
-  border: 1px solid rgba(122, 91, 62, 0.9);
+  background: rgba(122, 45, 45, 0.8);
+  border: 1px solid rgba(122, 45, 45, 0.95);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -43,5 +48,5 @@
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  margin-left: 8px;
+  margin-left: 0;
 }

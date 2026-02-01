@@ -65,6 +65,11 @@ function App() {
     await user.reload()
 
     const title = post.description?.trim() || post.location
+    const profileMeta = {
+      major: localStorage.getItem('userMajor') || '',
+      year: localStorage.getItem('userYear') || '',
+      gender: localStorage.getItem('userGender') || '',
+    }
 
     try {
       await addDoc(collection(db, "posts"), {
@@ -75,6 +80,7 @@ function App() {
         owner: {
           uid: user.uid,
           displayName: user.displayName || "Anonymous",
+          ...profileMeta,
         },
       })
     } catch (error) {

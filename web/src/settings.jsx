@@ -11,6 +11,7 @@ import {
   Stack,
   Divider,
   Box,
+  Select,
 } from '@mantine/core'
 import { auth, db } from './firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
@@ -41,10 +42,17 @@ export default function Settings() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [major, setMajor] = useState('')
+  const [year, setYear] = useState('')
+  const [gender, setGender] = useState('')
+  const [profileSaved, setProfileSaved] = useState(false)
 
   useEffect(() => {
     const storedPfp = localStorage.getItem('selectedPfp') || ''
     setPfp(storedPfp)
+    setMajor(localStorage.getItem('userMajor') || '')
+    setYear(localStorage.getItem('userYear') || '')
+    setGender(localStorage.getItem('userGender') || '')
   }, [])
 
   useEffect(() => {
@@ -129,6 +137,14 @@ export default function Settings() {
     signOut(auth).then(() => navigate('/login'))
   }
 
+  function handleSaveProfileDetails() {
+    localStorage.setItem('userMajor', major.trim())
+    localStorage.setItem('userYear', year)
+    localStorage.setItem('userGender', gender)
+    setProfileSaved(true)
+    setTimeout(() => setProfileSaved(false), 1500)
+  }
+
   if (loading) {
     return (
       <Box p="xl">
@@ -190,6 +206,37 @@ export default function Settings() {
               {user.email}
             </Text>
           </div>
+        </Stack>
+      </Card>
+
+      <Card withBorder radius="md" padding="lg" mb="lg">
+        <Title order={4} mb="md">
+          Profile details
+        </Title>
+        <Stack gap="sm">
+          <TextInput
+            label="Major"
+            placeholder="e.g. Computer Science"
+            value={major}
+            onChange={(e) => setMajor(e.target.value)}
+          />
+          <Select
+            label="Year"
+            placeholder="Select year"
+            data={['1st Year', '2nd Year', '3rd Year', '4th Year', 'Graduate', 'Alumni']}
+            value={year}
+            onChange={(value) => setYear(value || '')}
+          />
+          <Select
+            label="Gender"
+            placeholder="Select gender"
+            data={['Woman', 'Man', 'Non-binary', 'Prefer not to say', 'Other']}
+            value={gender}
+            onChange={(value) => setGender(value || '')}
+          />
+          <Button onClick={handleSaveProfileDetails}>
+            {profileSaved ? 'Saved!' : 'Save profile details'}
+          </Button>
         </Stack>
       </Card>
 
