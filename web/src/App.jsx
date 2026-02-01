@@ -2,7 +2,7 @@ import './App.css'
 import Carousel from './Carousel'
 import Navigation from './Navigation'
 import UploadButton from './UploadButton'
-import VerifyEmail from "./Verifyemail";
+
 
 function App() {
   return (
