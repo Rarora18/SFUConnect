@@ -9,7 +9,7 @@ import { router } from './router'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <MantineProvider>
+    <MantineProvider theme={{ fontFamily: "Orbitron, sans-serif" }}>
       <RouterProvider router={router} />
     </MantineProvider>
   </StrictMode>,
