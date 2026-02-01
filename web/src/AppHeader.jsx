@@ -12,12 +12,18 @@ export default function AppHeader() {
   })
 
   return (
-    <div style={{ marginBottom: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
-      <img src={logo} alt="SFU Connect logo" style={{ width: 200, height: 200, borderRadius: 8 }} />
-      <div style={{ textAlign: 'left' }}>
-        <Title order={2} c="#AA4A44" style={{ margin: 0, fontSize: 60, lineHeight: 1}}>{'SFU Connect'}</Title>
-        <Text size="xs" color="dimmed" style={{ marginTop: 4}}>Create and share meetups on campus</Text>
+    <header className="top-nav">
+      <div className="top-nav__content">
+        <img className="top-nav__logo" src={logo} alt="SFU Connect logo" />
+        <div className="top-nav__text">
+          <Title order={2} c="white" className="top-nav__title">
+            SFU Connect
+          </Title>
+          <Text size="xs" c="white" className="top-nav__subtitle">
+            Create and share meetups on campus
+          </Text>
+        </div>
       </div>
-    </div>
+    </header>
   )
 }
