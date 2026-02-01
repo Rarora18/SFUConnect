@@ -14,11 +14,15 @@ import Navigation from './Navigation'
 import AppHeader from './AppHeader'
 import UploadButton from './UploadButton'
 import Chat from './chat'
+import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
 
 function App() {
   const [page, setPage] = useState('home')
   const [otherUser, setOtherUser] = useState(null)
+
+  const [pendingUser, setPendingUser] = useState(null) // ✅ ADD (who you clicked "Message" on)
+
   const [posts, setPosts] = useState([])
   const [postsError, setPostsError] = useState('')
   const [isLoadingPosts, setIsLoadingPosts] = useState(true)
@@ -56,10 +60,10 @@ function App() {
   const handlePostSubmit = async (post) => {
     const user = auth.currentUser
     if (!user) {
-      alert("You must be logged in to post.")
+      alert('You must be logged in to post.')
       return
     }
-    console.log("DISPLAY NAME:", auth.currentUser.displayName);
+    console.log('DISPLAY NAME:', auth.currentUser.displayName)
 
     // ⭐ IMPORTANT: refresh user so displayName is NOT null
     await user.reload()
@@ -67,27 +71,54 @@ function App() {
     const title = post.description?.trim() || post.location
 
     try {
-      await addDoc(collection(db, "posts"), {
+      await addDoc(collection(db, 'posts'), {
         image: post.image,
         title,
         category: post.location,
         createdAt: serverTimestamp(),
         owner: {
           uid: user.uid,
-          displayName: user.displayName || "Anonymous",
+          displayName: user.displayName || 'Anonymous',
+          photoURL: user.photoURL || '', // ✅ OPTIONAL (helps inbox show avatars)
         },
       })
     } catch (error) {
-      console.error("Failed to save post:", error)
-      alert("Failed to save post. Check console for details.")
+      console.error('Failed to save post:', error)
+      alert('Failed to save post. Check console for details.')
     }
   }
 
   const carouselItems = posts
 
+  // ✅ Inbox page (choose which chat to open)
+  if (page === 'inbox') {
+    return (
+      <>
+        <Navigation />
+        <Inbox
+          onBack={() => {
+            setPendingUser(null)
+            setPage('home')
+          }}
+          onOpenChat={(u) => {
+            setOtherUser(u)
+            setPendingUser(null)
+            setPage('chat')
+          }}
+          pendingUser={pendingUser}
+        />
+      </>
+    )
+  }
+
   // Chat page
   if (page === 'chat' && otherUser) {
-    return <Chat onBack={() => setPage('home')} otherUser={otherUser} />
+    return (
+      <>
+        <Navigation />
+        <Chat onBack={() => setPage('inbox')} otherUser={otherUser} />
+      </>
+    )
   }
 
   return (
@@ -114,8 +145,14 @@ function App() {
           <Carousel
             items={carouselItems}
             onMessage={(owner) => {
-              setOtherUser(owner)
-              setPage('chat')
+              // ✅ CHANGE: go to inbox list first, not straight into chat
+              // owner is expected like: { uid, displayName, photoURL? }
+              setPendingUser({
+                uid: owner?.uid,
+                displayName: owner?.displayName || owner?.name || 'User',
+                photoURL: owner?.photoURL || '',
+              })
+              setPage('inbox')
             }}
           />
         </div>
@@ -125,3 +162,4 @@ function App() {
 }
 
 export default App
+
