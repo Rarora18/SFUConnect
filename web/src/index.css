@@ -1,13 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 @import "tailwindcss";
 @import "daisyui/daisyui.css";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+html {
+  font-family: "Orbitron", sans-serif !important;
+}
 
 :root {
-  --mantine-font-family: 'Special Elite', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  font-family: 'Special Elite', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+  --mantine-font-family: "Orbitron", sans-serif;
+  font-family: "Orbitron", sans-serif !important;
   line-height: 1.6;
   font-weight: 400;
 
@@ -34,26 +36,13 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  font-family: 'Special Elite', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
-  background:
-    linear-gradient(0deg, rgba(247, 241, 230, 0.95), rgba(247, 241, 230, 0.95)),
-    radial-gradient(circle at 20% 20%, rgba(192, 161, 116, 0.25), transparent 45%),
-    radial-gradient(circle at 80% 10%, rgba(226, 201, 160, 0.2), transparent 40%);
+  font-family: "Orbitron", sans-serif !important;
+  background: #ffffff;
 }
 
 body::before {
   content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.18;
-  background-image:
-    repeating-linear-gradient(0deg, rgba(122, 91, 62, 0.22) 0, rgba(122, 91, 62, 0.22) 1px, transparent 1px, transparent 28px),
-    repeating-linear-gradient(90deg, rgba(122, 91, 62, 0.12) 0, rgba(122, 91, 62, 0.12) 1px, transparent 1px, transparent 140px);
-  background-size: 100% 280px, 280px 100%;
-  animation: campus-drift 22s linear infinite;
-  z-index: 0;
+  display: none;
 }
 
 @keyframes campus-drift {
@@ -66,7 +55,7 @@ body::before {
 }
 
 h1 {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 3.2em;
   line-height: 1.1;
 }

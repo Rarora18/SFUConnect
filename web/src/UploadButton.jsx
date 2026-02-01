@@ -95,7 +95,11 @@ export default function UploadButton({ onSubmit, onClick }) {
               autosize
               radius="md"
             />
-            <Button type="submit" radius="md">
+            <Button
+              type="submit"
+              radius="md"
+              style={{ backgroundColor: '#7a2d2d', color: '#fff' }}
+            >
               Submit
             </Button>
           </Stack>

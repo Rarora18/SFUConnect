@@ -18,19 +18,15 @@ export default function Navigation() {
   const items = [
     { icon: FiHome, label: 'Home' },
     { icon: FiMessageSquare, label: 'Chat' },
-    { icon: FiUser, label: 'Account' },
     { icon: FiSettings, label: 'Settings' },
     { icon: FiLogOut, label: 'Logout' },
   ]
 
   const handleClick = async (item) => {
     setActive(item.label)
-
-    if (item.label === 'Account') {
-      navigate('/profile')
-    }
-
-    if (item.label === 'Logout') {
+    if (item.label === 'Settings') {
+      navigate('/settings')
+    } else if (item.label === 'Logout') {
       try {
         await signOut(auth)
         navigate('/login')

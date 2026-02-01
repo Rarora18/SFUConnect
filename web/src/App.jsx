@@ -75,6 +75,11 @@ function App() {
     await user.reload()
 
     const title = post.description?.trim() || post.location
+    const profileMeta = {
+      major: localStorage.getItem('userMajor') || '',
+      year: localStorage.getItem('userYear') || '',
+      gender: localStorage.getItem('userGender') || '',
+    }
 
     try {
       await addDoc(collection(db, 'posts'), {
@@ -86,6 +91,7 @@ function App() {
           uid: user.uid,
           displayName: user.displayName || 'Anonymous',
           photoURL: user.photoURL || '', // ✅ OPTIONAL (helps inbox show avatars)
+          ...profileMeta,
         },
       })
     } catch (error) {
