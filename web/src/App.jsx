@@ -16,11 +16,12 @@ import UploadButton from './UploadButton'
 import Chat from './chat'
 import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
-import mbcImage from './assets/MBC.jpg'
-import subImage from './assets/SUB.jpg'
-import wmcImage from './assets/WMC.jpg'
-import libraryImage from './assets/Library.jpeg'
-import recImage from './assets/Recreationsp.avif'
+import gymImage from './assets/decorations/gym.jpeg'
+import mackenzieImage from './assets/decorations/mackenzie.jpg'
+import sryeImage from './assets/decorations/srye.jpg'
+import starbucksImage from './assets/decorations/starbucks.jpg'
+import subintImage from './assets/decorations/subint.jpg'
+import timsImage from './assets/decorations/tims.webp'
 
 function App() {
   const [page, setPage] = useState('home')
@@ -136,11 +137,15 @@ function App() {
           <aside className="board-notes board-notes--left" aria-label="Pinned photos left">
             <div className="photo-note photo-note--tilt">
               <div className="photo-note__pin" />
-              <img src={mbcImage} alt="Maggie Benston Center" />
+              <img src={mackenzieImage} alt="Mackenzie Cafe" />
             </div>
             <div className="photo-note photo-note--tilt3">
               <div className="photo-note__pin" />
-              <img src={libraryImage} alt="Library" />
+              <img src={gymImage} alt="Campus gym" />
+            </div>
+            <div className="photo-note photo-note--tilt2">
+              <div className="photo-note__pin" />
+              <img src={timsImage} alt="Tim Hortons" />
             </div>
           </aside>
           <div className="board-main">
@@ -177,15 +182,15 @@ function App() {
           <aside className="board-notes board-notes--right" aria-label="Pinned photos right">
             <div className="photo-note photo-note--tilt2">
               <div className="photo-note__pin" />
-              <img src={subImage} alt="Student Union Building" />
+              <img src={subintImage} alt="SUB interior" />
             </div>
             <div className="photo-note photo-note--tilt4">
               <div className="photo-note__pin" />
-              <img src={wmcImage} alt="West Mall Center" />
+              <img src={starbucksImage} alt="Starbucks" />
             </div>
             <div className="photo-note photo-note--tilt5">
               <div className="photo-note__pin" />
-              <img src={recImage} alt="Recreation" />
+              <img src={sryeImage} alt="Srye building" />
             </div>
           </aside>
         </div>
