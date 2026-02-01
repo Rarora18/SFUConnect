@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { signOut } from 'firebase/auth'
+import { auth } from './firebase'
 import './Navigation.css'
 
 export default function Navigation() {
@@ -24,6 +26,10 @@ export default function Navigation() {
     setActive(item.label)
     if (item.label === 'Account') {
       navigate('/profile')
+    } else if (item.label === 'Settings') {
+      navigate('/settings')
+    } else if (item.label === 'Logout') {
+      signOut(auth).then(() => navigate('/login'))
     }
   }
 
