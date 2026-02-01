@@ -27,7 +27,7 @@ function Card({ image, title, category }) {
   );
 }
 
-const data = [
+export const defaultCarouselData = [
   {
     image:
       'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?auto=format&fit=crop&w=400&q=80',
@@ -66,12 +66,14 @@ const data = [
   },
 ];
 
-export function CardsCarousel() {
+export function CardsCarousel({ items }) {
   const theme = useMantineTheme();
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`);
 
-  const slides = data.map((item) => (
-    <Carousel.Slide key={item.title}>
+  const carouselItems = items && items.length > 0 ? items : defaultCarouselData;
+
+  const slides = carouselItems.map((item, index) => (
+    <Carousel.Slide key={item.id ?? `${item.title}-${index}`}>
       <Card {...item} />
     </Carousel.Slide>
   ));
@@ -85,7 +87,6 @@ export function CardsCarousel() {
       previousControlProps={{ 'aria-label': 'Previous slide' }}
     >
       {slides}
-      <button className="btn btn-wide">Wide</button>
     </Carousel>
     
   );
