@@ -18,6 +18,11 @@
   text-align: left;
 }
 
+.cardContent {
+  width: 100%;
+  text-align: left;
+}
+
 .card::before {
   content: '';
   position: absolute;

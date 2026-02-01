@@ -90,7 +90,7 @@ function App() {
         owner: {
           uid: user.uid,
           displayName: user.displayName || 'Anonymous',
-          photoURL: user.photoURL || '', // ✅ OPTIONAL (helps inbox show avatars)
+          photoURL: user.photoURL || '',
           ...profileMeta,
         },
       })
