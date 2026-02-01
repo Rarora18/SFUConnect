@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { auth, db } from './firebase'
 import { collection, onSnapshot, query, where, orderBy, limit } from 'firebase/firestore'
+import './chat.css'
 
 function Initials({ name }) {
   const initials = (name || 'User')
@@ -107,8 +108,8 @@ export default function Inbox({ onBack, onOpenChat, pendingUser }) {
           </button>
 
           <div className="cp-top-center">
-            <div className="cp-title">Messages</div>
-            <div className="cp-sub">Pick a chat (max 5)</div>
+            <div className="cp-title">Meet on the Mountain</div>
+            <div className="cp-sub">Pick a friend! (max 5)</div>
           </div>
 
           <div className="cp-top-right" />
