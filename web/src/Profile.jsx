@@ -36,9 +36,9 @@ export default function Profile() {
             <Image
               src={p}
               alt="pfp"
-              width={80}
-              height={80}
-              style={{ borderRadius: 12, cursor: 'pointer', border: selected === p ? '3px solid #4F46E5' : '3px solid transparent' }}
+              width={40}
+              height={40}
+              style={{ borderRadius: 12, cursor: 'pointer', border: selected === p ? '3px solid red' : '3px solid transparent' }}
               onClick={() => choose(p)}
             />
           </div>
