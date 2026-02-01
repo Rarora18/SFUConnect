@@ -4,7 +4,7 @@ import { useMediaQuery } from '@mantine/hooks';
 import classes from './CarouselCard.module.css';
 
 const categoryLabels = {
-  'Maggie Benston Center': 'MBC',
+  'Maggie Benston Center': 'Maggie Benston Center',
   'Student Union Building (SUB)': 'Student Union Building',
   'West Mall Center': 'West Mall Center',
   'Reacreational Activity': 'Recreation',
