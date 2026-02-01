@@ -43,7 +43,11 @@ function Card({ image, title, category, ownerName, onMessageClick }) {
       </div>
 
       {onMessageClick && (
-        <Button variant="filled" color="blue" onClick={onMessageClick}>
+        <Button
+          variant="filled"
+          style={{ backgroundColor: '#7a2d2d', color: '#fff' }}
+          onClick={onMessageClick}
+        >
           Message
         </Button>
       )}

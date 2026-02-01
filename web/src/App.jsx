@@ -16,6 +16,12 @@ import UploadButton from './UploadButton'
 import Chat from './chat'
 import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
+import gymImage from './assets/decorations/gym.jpeg'
+import mackenzieImage from './assets/decorations/mackenzie.jpg'
+import sryeImage from './assets/decorations/srye.jpg'
+import starbucksImage from './assets/decorations/starbucks.jpg'
+import subintImage from './assets/decorations/subint.jpg'
+import timsImage from './assets/decorations/tims.webp'
 
 function App() {
   const [page, setPage] = useState('home')
@@ -127,34 +133,66 @@ function App() {
 
       <div className="page-content">
         <AppHeader />
-        <div className="carousel-wrapper">
-          {postsError && (
-            <p style={{ marginBottom: '12px', color: '#e03131' }}>
-              Failed to load posts (error: {postsError}).
-            </p>
-          )}
+        <div className="board">
+          <aside className="board-notes board-notes--left" aria-label="Pinned photos left">
+            <div className="photo-note photo-note--tilt">
+              <div className="photo-note__pin" />
+              <img src={mackenzieImage} alt="Mackenzie Cafe" />
+            </div>
+            <div className="photo-note photo-note--tilt3">
+              <div className="photo-note__pin" />
+              <img src={gymImage} alt="Campus gym" />
+            </div>
+            <div className="photo-note photo-note--tilt2">
+              <div className="photo-note__pin" />
+              <img src={timsImage} alt="Tim Hortons" />
+            </div>
+          </aside>
+          <div className="board-main">
+            <div className="carousel-wrapper">
+              {postsError && (
+                <p style={{ marginBottom: '12px', color: '#e03131' }}>
+                  Failed to load posts (error: {postsError}).
+                </p>
+              )}
 
-          {isLoadingPosts && (
-            <p style={{ marginBottom: '12px', color: '#868e96' }}>
-              Loading posts...
-            </p>
-          )}
+              {isLoadingPosts && (
+                <p style={{ marginBottom: '12px', color: '#868e96' }}>
+                  Loading posts...
+                </p>
+              )}
 
-          <UploadButton onSubmit={handlePostSubmit} />
+              <UploadButton onSubmit={handlePostSubmit} />
 
-          <Carousel
-            items={carouselItems}
-            onMessage={(owner) => {
-              // ✅ CHANGE: go to inbox list first, not straight into chat
-              // owner is expected like: { uid, displayName, photoURL? }
-              setPendingUser({
-                uid: owner?.uid,
-                displayName: owner?.displayName || owner?.name || 'User',
-                photoURL: owner?.photoURL || '',
-              })
-              setPage('inbox')
-            }}
-          />
+              <Carousel
+                items={carouselItems}
+                onMessage={(owner) => {
+                  // ✅ CHANGE: go to inbox list first, not straight into chat
+                  // owner is expected like: { uid, displayName, photoURL? }
+                  setPendingUser({
+                    uid: owner?.uid,
+                    displayName: owner?.displayName || owner?.name || 'User',
+                    photoURL: owner?.photoURL || '',
+                  })
+                  setPage('inbox')
+                }}
+              />
+            </div>
+          </div>
+          <aside className="board-notes board-notes--right" aria-label="Pinned photos right">
+            <div className="photo-note photo-note--tilt2">
+              <div className="photo-note__pin" />
+              <img src={subintImage} alt="SUB interior" />
+            </div>
+            <div className="photo-note photo-note--tilt4">
+              <div className="photo-note__pin" />
+              <img src={starbucksImage} alt="Starbucks" />
+            </div>
+            <div className="photo-note photo-note--tilt5">
+              <div className="photo-note__pin" />
+              <img src={sryeImage} alt="Srye building" />
+            </div>
+          </aside>
         </div>
       </div>
     </>
