@@ -16,6 +16,11 @@ import UploadButton from './UploadButton'
 import Chat from './chat'
 import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
+import mbcImage from './assets/MBC.jpg'
+import subImage from './assets/SUB.jpg'
+import wmcImage from './assets/WMC.jpg'
+import libraryImage from './assets/Library.jpeg'
+import recImage from './assets/Recreationsp.avif'
 
 function App() {
   const [page, setPage] = useState('home')
@@ -127,34 +132,62 @@ function App() {
 
       <div className="page-content">
         <AppHeader />
-        <div className="carousel-wrapper">
-          {postsError && (
-            <p style={{ marginBottom: '12px', color: '#e03131' }}>
-              Failed to load posts (error: {postsError}).
-            </p>
-          )}
+        <div className="board">
+          <aside className="board-notes board-notes--left" aria-label="Pinned photos left">
+            <div className="photo-note photo-note--tilt">
+              <div className="photo-note__pin" />
+              <img src={mbcImage} alt="Maggie Benston Center" />
+            </div>
+            <div className="photo-note photo-note--tilt3">
+              <div className="photo-note__pin" />
+              <img src={libraryImage} alt="Library" />
+            </div>
+          </aside>
+          <div className="board-main">
+            <div className="carousel-wrapper">
+              {postsError && (
+                <p style={{ marginBottom: '12px', color: '#e03131' }}>
+                  Failed to load posts (error: {postsError}).
+                </p>
+              )}
 
-          {isLoadingPosts && (
-            <p style={{ marginBottom: '12px', color: '#868e96' }}>
-              Loading posts...
-            </p>
-          )}
+              {isLoadingPosts && (
+                <p style={{ marginBottom: '12px', color: '#868e96' }}>
+                  Loading posts...
+                </p>
+              )}
 
-          <UploadButton onSubmit={handlePostSubmit} />
+              <UploadButton onSubmit={handlePostSubmit} />
 
-          <Carousel
-            items={carouselItems}
-            onMessage={(owner) => {
-              // ✅ CHANGE: go to inbox list first, not straight into chat
-              // owner is expected like: { uid, displayName, photoURL? }
-              setPendingUser({
-                uid: owner?.uid,
-                displayName: owner?.displayName || owner?.name || 'User',
-                photoURL: owner?.photoURL || '',
-              })
-              setPage('inbox')
-            }}
-          />
+              <Carousel
+                items={carouselItems}
+                onMessage={(owner) => {
+                  // ✅ CHANGE: go to inbox list first, not straight into chat
+                  // owner is expected like: { uid, displayName, photoURL? }
+                  setPendingUser({
+                    uid: owner?.uid,
+                    displayName: owner?.displayName || owner?.name || 'User',
+                    photoURL: owner?.photoURL || '',
+                  })
+                  setPage('inbox')
+                }}
+              />
+            </div>
+          </div>
+          <aside className="board-notes board-notes--right" aria-label="Pinned photos right">
+            <div className="photo-note photo-note--tilt2">
+              <div className="photo-note__pin" />
+              <img src={subImage} alt="Student Union Building" />
+            </div>
+            <div className="photo-note photo-note--tilt4">
+              <div className="photo-note__pin" />
+              <img src={wmcImage} alt="West Mall Center" />
+            </div>
+            <div className="photo-note photo-note--tilt5">
+              <div className="photo-note__pin" />
+              <img src={recImage} alt="Recreation" />
+            </div>
+          </aside>
         </div>
       </div>
     </>
