@@ -12,7 +12,14 @@ import {
   Divider,
   Box,
   Select,
+  SimpleGrid,
 } from '@mantine/core'
+import pfp1 from './assets/pfp_1.png'
+import pfp2 from './assets/pfp_2.png'
+import pfp3 from './assets/pfp_3.png'
+import pfp4 from './assets/pfp_4.png'
+
+const PFPS = [pfp1, pfp2, pfp3, pfp4]
 import { auth, db } from './firebase'
 import { onAuthStateChanged, signOut } from 'firebase/auth'
 import {
@@ -145,6 +152,11 @@ export default function Settings() {
     setTimeout(() => setProfileSaved(false), 1500)
   }
 
+  function choosePfp(selected) {
+    localStorage.setItem('selectedPfp', selected)
+    setPfp(selected)
+  }
+
   if (loading) {
     return (
       <Box p="xl">
@@ -166,7 +178,7 @@ export default function Settings() {
 
   return (
     <Box p="xl" maw={480} mx="auto">
-      <Button variant="subtle" size="sm" mb="md" onClick={() => navigate('/')}>
+      <Button variant="subtle" size="sm" mb="md" color="#7a2d2d" onClick={() => navigate('/')}>
         ← Back to home
       </Button>
       <Title order={2} mb="lg">
@@ -206,6 +218,27 @@ export default function Settings() {
               {user.email}
             </Text>
           </div>
+          <div style={{ width: '100%', marginTop: 8 }}>
+            <Text size="sm" fw={500} mb={6}>Choose profile picture</Text>
+            <SimpleGrid cols={4} spacing="xs" style={{ maxWidth: 160, margin: '0 auto' }}>
+              {PFPS.map((p) => (
+                <Box key={p} style={{ textAlign: 'center' }}>
+                  <Image
+                    src={p}
+                    alt=""
+                    w={40}
+                    h={40}
+                    style={{
+                      borderRadius: 8,
+                      cursor: 'pointer',
+                      border: pfp === p ? '2px solid var(--mantine-color-red-6)' : '2px solid transparent',
+                    }}
+                    onClick={() => choosePfp(p)}
+                  />
+                </Box>
+              ))}
+            </SimpleGrid>
+          </div>
         </Stack>
       </Card>
 
@@ -234,7 +267,7 @@ export default function Settings() {
             value={gender}
             onChange={(value) => setGender(value || '')}
           />
-          <Button onClick={handleSaveProfileDetails}>
+          <Button onClick={handleSaveProfileDetails} color="#7a2d2d">
             {profileSaved ? 'Saved!' : 'Save profile details'}
           </Button>
         </Stack>
@@ -246,8 +279,9 @@ export default function Settings() {
         </Title>
         <Stack gap="sm">
           <Button
-            variant="light"
+            variant="filled"
             fullWidth
+            style={{ backgroundColor: '#7a2d2d', color: '#fff' }}
             onClick={() => {
               setNewUsername(username)
               setError('')
@@ -257,9 +291,9 @@ export default function Settings() {
             Change username
           </Button>
           <Button
-            variant="light"
+            variant="filled"
             fullWidth
-            color="orange"
+            style={{ backgroundColor: '#7a2d2d', color: '#fff' }}
             onClick={() => {
               setError('')
               setPasswordModalOpen(true)
@@ -295,7 +329,7 @@ export default function Settings() {
               {error}
             </Text>
           )}
-          <Button onClick={handleUpdateUsername} loading={submitting}>
+          <Button onClick={handleUpdateUsername} loading={submitting} color="#7a2d2d">
             Save
           </Button>
         </Stack>
@@ -339,7 +373,7 @@ export default function Settings() {
               {error}
             </Text>
           )}
-          <Button onClick={handleUpdatePassword} loading={submitting}>
+          <Button onClick={handleUpdatePassword} loading={submitting} color="#7a2d2d">
             Update password
           </Button>
         </Stack>
