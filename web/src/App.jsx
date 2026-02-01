@@ -14,7 +14,7 @@ import Navigation from './Navigation'
 import AppHeader from './AppHeader'
 import UploadButton from './UploadButton'
 import Chat from './chat'
-import { db } from './firebase'
+import { db, auth } from './firebase'
 
 function App() {
   const [page, setPage] = useState('home')
@@ -23,6 +23,7 @@ function App() {
   const [postsError, setPostsError] = useState('')
   const [isLoadingPosts, setIsLoadingPosts] = useState(true)
 
+  // Load posts
   useEffect(() => {
     const postsQuery = query(
       collection(db, 'posts'),
@@ -51,31 +52,40 @@ function App() {
     return () => unsubscribe()
   }, [])
 
+  // Handle new post submission
   const handlePostSubmit = async (post) => {
-    const title = post.description?.trim() || post.location
-    const nextPost = {
-      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-      image: post.image,
-      title,
-      category: post.location,
+    const user = auth.currentUser
+    if (!user) {
+      alert("You must be logged in to post.")
+      return
     }
+    console.log("DISPLAY NAME:", auth.currentUser.displayName);
+
+    // ⭐ IMPORTANT: refresh user so displayName is NOT null
+    await user.reload()
+
+    const title = post.description?.trim() || post.location
 
     try {
-      await addDoc(collection(db, 'posts'), {
-        image: nextPost.image,
-        title: nextPost.title,
-        category: nextPost.category,
+      await addDoc(collection(db, "posts"), {
+        image: post.image,
+        title,
+        category: post.location,
         createdAt: serverTimestamp(),
+        owner: {
+          uid: user.uid,
+          displayName: user.displayName || "Anonymous",
+        },
       })
     } catch (error) {
-      console.error('Failed to save post:', error)
-      alert('Failed to save post. Check console for details.')
-      setPosts((current) => [nextPost, ...current])
+      console.error("Failed to save post:", error)
+      alert("Failed to save post. Check console for details.")
     }
   }
 
   const carouselItems = posts
 
+  // Chat page
   if (page === 'chat' && otherUser) {
     return <Chat onBack={() => setPage('home')} otherUser={otherUser} />
   }
@@ -92,12 +102,15 @@ function App() {
               Failed to load posts (error: {postsError}).
             </p>
           )}
+
           {isLoadingPosts && (
             <p style={{ marginBottom: '12px', color: '#868e96' }}>
               Loading posts...
             </p>
           )}
+
           <UploadButton onSubmit={handlePostSubmit} />
+
           <Carousel
             items={carouselItems}
             onMessage={(owner) => {
@@ -105,9 +118,6 @@ function App() {
               setPage('chat')
             }}
           />
-          <button className="btn btn-outline btn-primary carousel-cta">
-            Message
-          </button>
         </div>
       </div>
     </>

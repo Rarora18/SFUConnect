@@ -3,7 +3,8 @@ import { useState } from "react";
 import { auth } from "./firebase";
 import { 
   createUserWithEmailAndPassword, 
-  sendEmailVerification 
+  sendEmailVerification, 
+  updateProfile
 } from "firebase/auth";
 import { db } from "./firebase";
 import { setDoc, doc } from "firebase/firestore";
@@ -25,6 +26,12 @@ export default function Authentication() {
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
+
+        await updateProfile(user, {
+            displayName : username
+        });
+        await user.reload();
+        console.log("Saved displayName:", user.displayName);
 
        await sendEmailVerification(user, {
         url: "http://localhost:5173/verify",

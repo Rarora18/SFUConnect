@@ -22,7 +22,7 @@ export default function Login() {
       setError("Please verify your email before logging in.");
       return;
     }
-
+    await auth.currentUser.reload();
     navigate("/");
   } catch (err) {
     switch (err.code) {

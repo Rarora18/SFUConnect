@@ -1,10 +1,14 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
-import { auth } from './firebase'
+import { useState } from 'react'
+import { signOut } from "firebase/auth"
+import { auth } from "./firebase"
+import { useNavigate } from "react-router-dom"
 import './Navigation.css'
 
 export default function Navigation() {
+  const navigate = useNavigate()
+  const user = auth.currentUser
+  const pfp = user?.photoURL   // ⭐ FIX: define pfp safely
+
   const items = [
     { icon: '🏠', label: 'Home' },
     { icon: '💬', label: 'Chat' },
@@ -14,32 +18,34 @@ export default function Navigation() {
   ]
 
   const [active, setActive] = useState('Home')
-  const [pfp, setPfp] = useState('')
-  const navigate = useNavigate()
 
-  useEffect(() => {
-    const stored = localStorage.getItem('selectedPfp') || ''
-    setPfp(stored)
-  }, [])
-
-  function handleClick(item) {
-    setActive(item.label)
-    if (item.label === 'Account') {
+  const handleClick = async (label) => {
+    setActive(label)
+    if (label === 'Account') {
       navigate('/profile')
-    } else if (item.label === 'Settings') {
+    } else if (label === 'Settings') {
       navigate('/settings')
-    } else if (item.label === 'Logout') {
-      signOut(auth).then(() => navigate('/login'))
+    } else if (label === 'Logout') {
+      try {
+        await signOut(auth)
+        navigate('/login')
+      } catch (err) {
+        console.error('Logout failed:', err)
+      }
     }
   }
 
   return (
     <nav className="rail" aria-label="Primary navigation">
       <ul className="rail-list">
-        {/* pfp above home */}
+
+        {/* Profile picture above Home */}
         <li className="rail-li">
           <div className="rail-pfp">
-            {pfp ? <img src={pfp} alt="pfp" /> : <span className="rail-ico">👤</span>}
+            {pfp
+              ? <img src={pfp} alt="pfp" />
+              : <span className="rail-ico">👤</span>
+            }
           </div>
         </li>
 
@@ -47,7 +53,7 @@ export default function Navigation() {
           <li key={item.label} className="rail-li">
             <button
               className={`rail-btn ${active === item.label ? 'active' : ''}`}
-              onClick={() => handleClick(item)}
+              onClick={() => handleClick(item.label)}
               aria-label={item.label}
               title={item.label}
             >

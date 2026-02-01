@@ -1,6 +1,7 @@
 import { Carousel } from '@mantine/carousel'
 import { Button, Paper, Text, Title, useMantineTheme } from '@mantine/core'
 import { useMediaQuery } from '@mantine/hooks'
+import { auth } from './firebase'
 import classes from './CarouselCard.module.css'
 
 const categoryLabels = {
@@ -11,10 +12,12 @@ const categoryLabels = {
   Library: 'Library',
 }
 
+// ⭐ Your Card component MUST be here
 function Card({ image, title, category, ownerName, onMessageClick }) {
   const cardStyle = image
     ? { backgroundImage: `url(${image})` }
     : { background: 'linear-gradient(135deg, #1f2937, #111827)' }
+
   return (
     <Paper
       shadow="md"
@@ -27,15 +30,18 @@ function Card({ image, title, category, ownerName, onMessageClick }) {
         <Text className={classes.category} size="xs">
           {categoryLabels[category] ?? category}
         </Text>
+
         <Title order={3} className={classes.title}>
           {title}
         </Title>
+
         {ownerName && (
           <Text size="sm" mt={8} style={{ color: 'rgba(255,255,255,0.85)' }}>
             Posted by {ownerName}
           </Text>
         )}
       </div>
+
       {onMessageClick && (
         <Button variant="filled" color="blue" onClick={onMessageClick}>
           Message
@@ -48,6 +54,8 @@ function Card({ image, title, category, ownerName, onMessageClick }) {
 export default function CardsCarousel({ items, onMessage }) {
   const theme = useMantineTheme()
   const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
+
+  const currentUid = auth.currentUser?.uid
 
   const carouselItems =
     items && items.length > 0
@@ -62,9 +70,13 @@ export default function CardsCarousel({ items, onMessage }) {
         ]
 
   const slides = carouselItems.map((item, index) => {
-    const ownerUid = item.ownerUid || item.ownerId || item.owner?.uid
-    const ownerName = item.ownerName || item.owner?.displayName
-    const canMessage = typeof onMessage === 'function' && ownerUid
+    const ownerUid = item.owner?.uid
+    const ownerName = item.owner?.displayName
+
+    const canMessage =
+      typeof onMessage === 'function' &&
+      ownerUid &&
+      ownerUid !== currentUid
 
     return (
       <Carousel.Slide key={item.id ?? `${item.title}-${index}`}>
@@ -72,7 +84,9 @@ export default function CardsCarousel({ items, onMessage }) {
           {...item}
           ownerName={ownerName}
           onMessageClick={
-            canMessage ? () => onMessage({ uid: ownerUid, displayName: ownerName }) : undefined
+            canMessage
+              ? () => onMessage({ uid: ownerUid, displayName: ownerName })
+              : undefined
           }
         />
       </Carousel.Slide>
