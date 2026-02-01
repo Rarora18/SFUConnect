@@ -85,8 +85,8 @@ function App() {
       <Navigation />
 
       <div className="page-content">
+        <AppHeader />
         <div className="carousel-wrapper">
-          <AppHeader />
           {postsError && (
             <p style={{ marginBottom: '12px', color: '#e03131' }}>
               Failed to load posts (error: {postsError}).

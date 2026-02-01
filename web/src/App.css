@@ -1,7 +1,7 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  max-width: none;
+  margin: 0;
+  padding: 0;
   text-align: center;
 }
 
@@ -13,7 +13,7 @@
 
 .page-content {
   margin-left: var(--rail-w, 0px);
-  padding: 2rem 1.5rem;
+  padding: 96px 1.5rem 2rem;
 }
 
 .carousel-cta {
@@ -21,6 +21,50 @@
   max-width: 420px;
   margin: 24px auto 0;
   display: block;
+}
+
+.top-nav {
+  width: 100vw;
+  background: #b91c1c;
+  border-radius: 0;
+  padding: 12px 18px;
+  margin: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  box-shadow: 0 10px 24px rgba(185, 28, 28, 0.25);
+}
+
+.top-nav__content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.top-nav__logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 6px;
+}
+
+.top-nav__text {
+  text-align: left;
+}
+
+.top-nav__title {
+  margin: 0;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+.top-nav__subtitle {
+  margin-top: 4px;
+  opacity: 0.85;
 }
 
 .logo {
