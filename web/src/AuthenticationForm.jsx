@@ -1,5 +1,3 @@
-
-
 import {
   Anchor,
   Button,
@@ -44,34 +42,48 @@ export function AuthenticationForm(props) {
   async function handleSubmit(values) {
     try {
       if (type === 'register') {
-        // Enforce SFU domain
         const domain = values.email.split('@')[1]
         if (domain !== 'sfu.ca') {
           alert('Only @sfu.ca emails are allowed.')
           return
         }
 
-        // Create user
         const userCred = await createUserWithEmailAndPassword(
           auth,
           values.email,
           values.password
         )
 
-        // Save displayName
         await updateProfile(userCred.user, {
           displayName: values.name,
         })
 
-        // Send verification email
-        await sendEmailVerification(userCred.user)
+        await sendEmailVerification(userCred.user, {
+          url: "http://localhost:5173/verify",
+          handleCodeInApp: true,
+        })
 
         alert('Account created! Check your email to verify your account.')
+
+        // ⭐ Redirect signup → login page
         window.location.href = '/'
+
       } else {
-        // Login
-        await signInWithEmailAndPassword(auth, values.email, values.password)
-        window.location.href = '/'
+        const userCred = await signInWithEmailAndPassword(
+          auth,
+          values.email,
+          values.password
+        )
+
+        await userCred.user.reload()
+
+        if (!userCred.user.emailVerified) {
+          alert("Please verify your email before logging in.")
+          return
+        }
+
+        // ⭐ Redirect login → /app
+        window.location.href = '/app'
       }
     } catch (err) {
       alert(err.message)

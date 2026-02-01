@@ -1,16 +1,50 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import App from "./App";
-import { AuthenticationForm } from "./AuthenticationForm";  // FIXED
+import { AuthenticationForm } from "./AuthenticationForm";
 import VerifyEmail from "./Verifyemail";
-import Settings from "./settings";
+import Profile from "./Profile";
+
+import ProtectedRoute from "./ProtectedRoute";
+import { AuthProvider } from "./AuthContext";
 
 export const router = createBrowserRouter([
-  { path: "/", element: <App /> },
+  {
+    path: "/",
+    element: (
+      <AuthProvider>
+        <AuthenticationForm />
+      </AuthProvider>
+    ),
+  },
 
-  // ⭐ Your new login + signup page (Mantine)
-  { path: "/auth", element: <AuthenticationForm /> },   // FIXED
+  {
+    path: "/app",
+    element: (
+      <AuthProvider>
+        <ProtectedRoute>
+          <App />
+        </ProtectedRoute>
+      </AuthProvider>
+    ),
+  },
 
-  { path: "/verify", element: <VerifyEmail /> },
-  { path: "/profile", element: <Navigate to="/settings" replace /> },
-  { path: "/settings", element: <Settings /> },
+  {
+    path: "/verify",
+    element: (
+      <AuthProvider>
+        <VerifyEmail />
+      </AuthProvider>
+    ),
+  },
+
+  {
+    path: "/profile",
+    element: (
+      <AuthProvider>
+        <ProtectedRoute>
+          <Profile />
+        </ProtectedRoute>
+      </AuthProvider>
+    ),
+  },
 ]);

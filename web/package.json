@@ -14,7 +14,7 @@
     "@mantine/carousel": "^8.3.13",
     "@mantine/core": "^8.3.13",
     "@mantine/form": "^8.3.13",
-    "@mantine/hooks": "^8.3.14",
+    "@mantine/hooks": "^8.3.13",
     "@mantine/notifications": "^8.3.13",
     "firebase": "^12.8.0",
     "react": "^19.2.0",

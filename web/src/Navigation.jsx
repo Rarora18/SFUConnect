@@ -24,12 +24,27 @@ export default function Navigation() {
 
   const handleClick = async (item) => {
     setActive(item.label)
+
+    if (item.label === 'Home') {
+      navigate('/home')
+    }
+
+    if (item.label === 'Chat') {
+      navigate('/chat')
+    }
+
+    if (item.label === 'Account') {
+      navigate('/profile')
+    }
+
     if (item.label === 'Settings') {
       navigate('/settings')
-    } else if (item.label === 'Logout') {
+    }
+
+    if (item.label === 'Logout') {
       try {
         await signOut(auth)
-        navigate('/login')
+        navigate('/')   // ⭐ Redirect to signup/login screen
       } catch (err) {
         console.error('Logout failed:', err)
       }
@@ -39,12 +54,19 @@ export default function Navigation() {
   return (
     <nav className="rail" aria-label="Primary navigation">
       <ul className="rail-list">
+
+        {/* Profile Picture */}
         <li className="rail-li">
           <div className="rail-pfp">
-            {pfp ? <img src={pfp} alt="pfp" /> : <FiUser className="rail-ico" aria-hidden="true" />}
+            {pfp ? (
+              <img src={pfp} alt="pfp" />
+            ) : (
+              <FiUser className="rail-ico" aria-hidden="true" />
+            )}
           </div>
         </li>
 
+        {/* Navigation Items */}
         {items.map((item) => {
           const Icon = item.icon
           return (
