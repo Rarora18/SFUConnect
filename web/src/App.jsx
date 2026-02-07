@@ -16,6 +16,7 @@ import UploadButton from './UploadButton'
 import Chat from './chat'
 import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
+import { getImageForLocation } from './locationImages'
 import gymImage from './assets/decorations/gym.jpeg'
 import mackenzieImage from './assets/decorations/mackenzie.jpg'
 import sryeImage from './assets/decorations/srye.jpg'
@@ -100,7 +101,11 @@ function App() {
     }
   }
 
-  const carouselItems = posts
+  // Resolve images from location so they work in production (stored URLs can be dev-only paths)
+  const carouselItems = posts.map((post) => ({
+    ...post,
+    image: getImageForLocation(post.category ?? post.location) ?? post.image,
+  }))
 
   const handleNav = (next) => {
     if (next === 'home') {

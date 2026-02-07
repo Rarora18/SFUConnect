@@ -1,10 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal, Select, Textarea, Stack, Text } from '@mantine/core'
-import mbcImage from './assets/MBC.jpg'
-import subImage from './assets/SUB.jpg'
-import wmcImage from './assets/WMC.jpg'
-import recImage from './assets/Recreationsp.avif'
-import libraryImage from './assets/Library.jpeg'
+import { locationImages } from './locationImages'
 
 const locationOptions = [
   { value: 'Maggie Benston Center', label: 'Maggie Benston Center' },
@@ -13,14 +9,6 @@ const locationOptions = [
   { value: 'Reacreational Activity', label: 'Reacreational Activity' },
   { value: 'Library', label: 'Library' },
 ]
-
-const locationImages = {
-  'Maggie Benston Center': mbcImage,
-  'Student Union Building (SUB)': subImage,
-  'West Mall Center': wmcImage,
-  'Reacreational Activity': recImage,
-  Library: libraryImage,
-}
 
 export default function UploadButton({ onSubmit, onClick }) {
   const [isOpen, setIsOpen] = useState(false)
