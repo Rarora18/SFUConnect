@@ -82,6 +82,44 @@ body{
   }
 }
 
+@media (max-width: 640px){
+  .cp-page{
+    padding: 10px;
+    padding-bottom: max(100px, calc(env(safe-area-inset-bottom) + 88px));
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .cp-topbar{
+    padding: 12px 14px;
+    top: 10px;
+  }
+
+  .cp-menu{
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .cp-body{
+    padding: 14px 10px 160px;
+  }
+
+  .cp-compose{
+    padding: 12px 12px max(18px, env(safe-area-inset-bottom));
+  }
+
+  .cp-input{
+    height: 48px;
+    font-size: 16px; /* avoids zoom on iOS */
+  }
+
+  .cp-send,
+  .cp-attach{
+    min-width: 48px;
+    min-height: 48px;
+  }
+}
+
 /* =========================
    CHAT SHELL
    ========================= */

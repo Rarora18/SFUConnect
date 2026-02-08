@@ -103,7 +103,7 @@ export default function Inbox({ onBack, onOpenChat, pendingUser }) {
     <div className="cp-page">
       <div className="cp-shell">
         <header className="cp-topbar">
-          <button className="cp-menu" type="button" onClick={onBack} aria-label="Back">
+          <button className="cp-menu" type="button" onClick={onBack} aria-label="Back to home">
             ☰
           </button>
 

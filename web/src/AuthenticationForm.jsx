@@ -82,7 +82,13 @@ export function AuthenticationForm() {
   return (
     <div
       className="fixed inset-0 flex flex-col justify-center overflow-auto px-6 py-12 lg:px-8"
-      style={{ backgroundColor: '#1a1512' }}
+      style={{
+        backgroundColor: '#1a1512',
+        paddingLeft: 'max(24px, env(safe-area-inset-left))',
+        paddingRight: 'max(24px, env(safe-area-inset-right))',
+        paddingTop: 'max(48px, env(safe-area-inset-top))',
+        paddingBottom: 'max(48px, env(safe-area-inset-bottom))',
+      }}
     >
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
         <img

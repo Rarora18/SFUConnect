@@ -35,7 +35,7 @@ export default function UploadButton({ onSubmit, onClick }) {
   }
 
   return (
-    <div style={{ margin: '12px 0', display: 'inline-block' }}>
+    <div className="upload-button-wrap" style={{ margin: '12px 0', display: 'inline-block' }}>
       <Button
         variant="filled"
         size="md"
