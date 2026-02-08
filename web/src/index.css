@@ -61,6 +61,12 @@ h1 {
 }
 
 
+/* Auth form: maroon focus ring to match site colors */
+.auth-form input:focus {
+  outline: 2px solid #7a2d2d;
+  outline-offset: -2px;
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #2b1e16;

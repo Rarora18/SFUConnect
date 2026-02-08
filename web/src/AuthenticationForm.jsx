@@ -1,17 +1,5 @@
-import {
-  Anchor,
-  Button,
-  Checkbox,
-  Divider,
-  Group,
-  Paper,
-  PasswordInput,
-  Stack,
-  Text,
-  TextInput,
-} from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { upperFirst, useToggle } from '@mantine/hooks'
+import { useToggle } from '@mantine/hooks'
 
 import { auth } from './firebase'
 import {
@@ -20,8 +8,9 @@ import {
   updateProfile,
   sendEmailVerification,
 } from 'firebase/auth'
+import logo from './assets/logo_1.png'
 
-export function AuthenticationForm(props) {
+export function AuthenticationForm() {
   const [type, toggle] = useToggle(['login', 'register'])
 
   const form = useForm({
@@ -31,7 +20,6 @@ export function AuthenticationForm(props) {
       password: '',
       terms: true,
     },
-
     validate: {
       email: (val) => (/^\S+@\S+$/.test(val) ? null : 'Invalid email'),
       password: (val) =>
@@ -39,7 +27,12 @@ export function AuthenticationForm(props) {
     },
   })
 
-  async function handleSubmit(values) {
+  async function handleSubmit(e) {
+    e.preventDefault()
+    const values = form.values
+    const validation = form.validate()
+    if (validation.hasErrors) return
+
     try {
       if (type === 'register') {
         const domain = values.email.split('@')[1]
@@ -59,15 +52,12 @@ export function AuthenticationForm(props) {
         })
 
         await sendEmailVerification(userCred.user, {
-          url: "http://localhost:5173/verify",
+          url: window.location.origin + '/verify',
           handleCodeInApp: true,
         })
 
         alert('Account created! Check your email to verify your account.')
-
-        // ⭐ Redirect signup → login page
         window.location.href = '/'
-
       } else {
         const userCred = await signInWithEmailAndPassword(
           auth,
@@ -78,11 +68,10 @@ export function AuthenticationForm(props) {
         await userCred.user.reload()
 
         if (!userCred.user.emailVerified) {
-          alert("Please verify your email before logging in.")
+          alert('Please verify your email before logging in.')
           return
         }
 
-        // ⭐ Redirect login → /app
         window.location.href = '/app'
       }
     } catch (err) {
@@ -91,86 +80,183 @@ export function AuthenticationForm(props) {
   }
 
   return (
-    <Paper radius="md" p="lg" withBorder {...props}>
-      <Text size="lg" fw={500} c="bright">
-        {upperFirst(type)} to your account
-      </Text>
+    <div
+      className="fixed inset-0 flex flex-col justify-center overflow-auto px-6 py-12 lg:px-8"
+      style={{ backgroundColor: '#1a1512' }}
+    >
+      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+        <img
+          src={logo}
+          alt="SFU Connect"
+          className="mx-auto h-10 w-auto"
+        />
+        <h2
+          className="mt-10 text-center text-2xl font-bold tracking-tight text-white"
+          style={{ lineHeight: 2.25 }}
+        >
+          {type === 'login' ? 'Sign in to your account' : 'Create your account'}
+        </h2>
+      </div>
 
-      <Divider
-        label="Continue with email"
-        labelPosition="center"
-        my="lg"
-        styles={{ label: { color: 'var(--mantine-color-bright)', opacity: 0.85 } }}
-      />
-
-      <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Stack>
+      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm auth-form">
+        <form onSubmit={handleSubmit} className="space-y-6">
           {type === 'register' && (
-            <TextInput
-              label="Name"
-              placeholder="Your name"
-              value={form.values.name}
-              onChange={(event) =>
-                form.setFieldValue('name', event.currentTarget.value)
-              }
-              radius="md"
-            />
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-100"
+                style={{ lineHeight: 1.5 }}
+              >
+                Name
+              </label>
+              <div className="mt-2">
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  required={type === 'register'}
+                  autoComplete="name"
+                  placeholder="Your name"
+                  value={form.values.name}
+                  onChange={(e) => form.setFieldValue('name', e.target.value)}
+                  className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 sm:text-sm"
+                  style={{
+                    lineHeight: 1.5,
+                    ['--tw-outline-color']: '#7a2d2d',
+                  }}
+                />
+              </div>
+            </div>
           )}
 
-          <TextInput
-            required
-            label="Email"
-            placeholder="yourname@sfu.ca"
-            value={form.values.email}
-            onChange={(event) =>
-              form.setFieldValue('email', event.currentTarget.value)
-            }
-            error={form.errors.email}
-            radius="md"
-          />
+          <div>
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-100"
+              style={{ lineHeight: 1.5 }}
+            >
+              Email address
+            </label>
+            <div className="mt-2">
+              <input
+                id="email"
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="yourname@sfu.ca"
+                value={form.values.email}
+                onChange={(e) => form.setFieldValue('email', e.target.value)}
+                onBlur={() => form.validateField('email')}
+                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 sm:text-sm"
+                style={{
+                  lineHeight: 1.5,
+                  ['--tw-outline-color']: '#7a2d2d',
+                }}
+              />
+              {form.errors.email && (
+                <p className="mt-1 text-sm text-red-400">{form.errors.email}</p>
+              )}
+            </div>
+          </div>
 
-          <PasswordInput
-            required
-            label="Password"
-            placeholder="Your password"
-            value={form.values.password}
-            onChange={(event) =>
-              form.setFieldValue('password', event.currentTarget.value)
-            }
-            error={form.errors.password}
-            radius="md"
-          />
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-100"
+              style={{ lineHeight: 1.5 }}
+            >
+              Password
+            </label>
+            <div className="mt-2">
+              <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                autoComplete={type === 'register' ? 'new-password' : 'current-password'}
+                placeholder="Your password"
+                value={form.values.password}
+                onChange={(e) => form.setFieldValue('password', e.target.value)}
+                onBlur={() => form.validateField('password')}
+                className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 sm:text-sm"
+                style={{
+                  lineHeight: 1.5,
+                  ['--tw-outline-color']: '#7a2d2d',
+                }}
+              />
+              {form.errors.password && (
+                <p className="mt-1 text-sm text-red-400">{form.errors.password}</p>
+              )}
+            </div>
+          </div>
 
           {type === 'register' && (
-            <Checkbox
-              label="I accept terms and conditions"
-              checked={form.values.terms}
-              onChange={(event) =>
-                form.setFieldValue('terms', event.currentTarget.checked)
-              }
-            />
+            <div className="flex items-center gap-2">
+              <input
+                id="terms"
+                name="terms"
+                type="checkbox"
+                required
+                checked={form.values.terms}
+                onChange={(e) => form.setFieldValue('terms', e.target.checked)}
+                className="h-4 w-4 rounded border-white/20 bg-white/5 text-[#7a2d2d] focus:ring-[#7a2d2d]"
+              />
+              <label htmlFor="terms" className="text-sm text-gray-300">
+                I accept the terms and conditions
+              </label>
+            </div>
           )}
-        </Stack>
 
-        <Group justify="space-between" mt="xl">
-          <Anchor
-            component="button"
-            type="button"
-            c="bright"
-            opacity={0.85}
-            onClick={() => toggle()}
-            size="xs"
-          >
-            {type === 'register'
-              ? 'Already have an account? Login'
-              : "Don't have an account? Register"}
-          </Anchor>
+          <div>
+            <button
+              type="submit"
+              className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7a2d2d]"
+              style={{
+                lineHeight: 1.5,
+                backgroundColor: '#7a2d2d',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#8a3d3d'
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = '#7a2d2d'
+              }}
+            >
+              {type === 'login' ? 'Sign in' : 'Register'}
+            </button>
+          </div>
+        </form>
 
-          <Button type="submit" radius="xl">
-            {upperFirst(type)}
-          </Button>
-        </Group>
-      </form>
-    </Paper>
+        <p
+          className="mt-10 text-center text-sm text-gray-400"
+          style={{ lineHeight: 1.5 }}
+        >
+          {type === 'login' ? (
+            <>
+              Not a member?{' '}
+              <button
+                type="button"
+                onClick={() => toggle()}
+                className="font-semibold text-[#b85c5c] hover:text-[#d07070]"
+              >
+                Create an account
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <button
+                type="button"
+                onClick={() => toggle()}
+                className="font-semibold text-[#b85c5c] hover:text-[#d07070]"
+              >
+                Sign in
+              </button>
+            </>
+          )}
+        </p>
+      </div>
+    </div>
   )
 }
