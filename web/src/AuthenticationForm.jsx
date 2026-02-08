@@ -88,7 +88,7 @@ export function AuthenticationForm() {
         <img
           src={logo}
           alt="SFU Connect"
-          className="mx-auto h-10 w-auto"
+          className="mx-auto h-28 w-auto sm:h-36"
         />
         <h2
           className="mt-10 text-center text-2xl font-bold tracking-tight text-white"
