@@ -168,9 +168,8 @@
   width: 64px;
   height: 64px;
   border-radius: 10px;
-  object-fit: cover;
-  background: rgba(255, 255, 255, 0.15);
-  padding: 6px;
+  object-fit: contain;
+  /* No background so transparent logo sits cleanly on the red nav */
 }
 
 .top-nav__text {
