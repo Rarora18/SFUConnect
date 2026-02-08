@@ -90,27 +90,28 @@ export function AuthenticationForm() {
         paddingBottom: 'max(48px, env(safe-area-inset-bottom))',
       }}
     >
-      <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          src={logo}
-          alt="SFUconnect"
-          className="mx-auto h-28 w-auto sm:h-36"
-        />
-        <p
-          className="mt-3 text-center text-xl font-bold tracking-tight text-white sm:text-2xl"
-          style={{ lineHeight: 1.25 }}
-        >
-          SFUconnect
-        </p>
-        <h2
-          className="mt-8 text-center text-2xl font-bold tracking-tight text-white"
-          style={{ lineHeight: 2.25 }}
-        >
-          {type === 'login' ? 'Sign in to your account' : 'Create your account'}
-        </h2>
-      </div>
+      <div className="auth-box">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            src={logo}
+            alt="SFUconnect"
+            className="mx-auto h-28 w-auto sm:h-36"
+          />
+          <p
+            className="mt-3 text-center text-xl font-bold tracking-tight text-white sm:text-2xl"
+            style={{ lineHeight: 1.25 }}
+          >
+            SFUconnect
+          </p>
+          <h2
+            className="mt-8 text-center text-2xl font-bold tracking-tight text-white"
+            style={{ lineHeight: 2.25 }}
+          >
+            {type === 'login' ? 'Sign in to your account' : 'Create your account'}
+          </h2>
+        </div>
 
-      <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm auth-form">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm auth-form">
         <form onSubmit={handleSubmit} className="space-y-6">
           {type === 'register' && (
             <div>
@@ -268,6 +269,7 @@ export function AuthenticationForm() {
             </>
           )}
         </p>
+        </div>
       </div>
     </div>
   )
