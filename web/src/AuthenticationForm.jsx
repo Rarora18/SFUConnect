@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useForm } from '@mantine/form'
 import { useToggle } from '@mantine/hooks'
 
@@ -12,6 +13,8 @@ import logo from './assets/logo_1.png'
 
 export function AuthenticationForm() {
   const [type, toggle] = useToggle(['login', 'register'])
+  const [showResend, setShowResend] = useState(false)
+  const [unverifiedUser, setUnverifiedUser] = useState(null)
 
   const form = useForm({
     initialValues: {
@@ -56,7 +59,9 @@ export function AuthenticationForm() {
           handleCodeInApp: true,
         })
 
-        alert('Account created! Check your email to verify your account.')
+        alert(
+          'Account created! Check your email to verify your account. If you don\'t see it, check your spam/junk folder and your SFU inbox filters.'
+        )
         window.location.href = '/'
       } else {
         const userCred = await signInWithEmailAndPassword(
@@ -68,14 +73,35 @@ export function AuthenticationForm() {
         await userCred.user.reload()
 
         if (!userCred.user.emailVerified) {
-          alert('Please verify your email before logging in.')
+          setUnverifiedUser(userCred.user)
+          setShowResend(true)
+          alert(
+            'Please verify your email before logging in. Check spam/junk, or use "Resend verification email" below.'
+          )
           return
         }
 
+        setShowResend(false)
+        setUnverifiedUser(null)
         window.location.href = '/app'
       }
     } catch (err) {
+      setShowResend(false)
+      setUnverifiedUser(null)
       alert(err.message)
+    }
+  }
+
+  async function handleResendVerification() {
+    if (!unverifiedUser) return
+    try {
+      await sendEmailVerification(unverifiedUser, {
+        url: window.location.origin + '/verify',
+        handleCodeInApp: true,
+      })
+      alert('Verification email sent again. Check your inbox and spam folder.')
+    } catch (err) {
+      alert(err.message || 'Failed to resend. Try again in a few minutes.')
     }
   }
 
@@ -240,6 +266,18 @@ export function AuthenticationForm() {
             </button>
           </div>
         </form>
+
+        {showResend && (
+          <div className="mt-6 text-center">
+            <button
+              type="button"
+              onClick={handleResendVerification}
+              className="text-sm font-semibold text-[#b85c5c] hover:text-[#d07070] underline"
+            >
+              Resend verification email
+            </button>
+          </div>
+        )}
 
         <p
           className="mt-10 text-center text-sm text-gray-400"

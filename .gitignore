@@ -16,6 +16,9 @@ node_modules/
 .pnp/
 .pnp.js
 
+# Root lockfile (app lives in web/)
+/package-lock.json
+
 # Build outputs
 dist/
 build/
