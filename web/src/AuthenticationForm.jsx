@@ -11,6 +11,16 @@ import {
 } from 'firebase/auth'
 import logo from './assets/logo_1.png'
 
+// Where to send users after they click the verification link in email (must match Firebase Authorized domains)
+const VERIFY_REDIRECT_ORIGIN =
+  import.meta.env?.VITE_VERIFY_ORIGIN?.replace?.(/\/$/, '') ||
+  (typeof window !== 'undefined' ? window.location.origin : null) ||
+  'https://sfu-connect.vercel.app'
+
+function getVerifyRedirectUrl() {
+  return `${VERIFY_REDIRECT_ORIGIN}/verify`
+}
+
 export function AuthenticationForm() {
   const [type, toggle] = useToggle(['login', 'register'])
   const [showResend, setShowResend] = useState(false)
@@ -55,7 +65,7 @@ export function AuthenticationForm() {
         })
 
         await sendEmailVerification(userCred.user, {
-          url: window.location.origin + '/verify',
+          url: getVerifyRedirectUrl(),
           handleCodeInApp: true,
         })
 
@@ -96,7 +106,7 @@ export function AuthenticationForm() {
     if (!unverifiedUser) return
     try {
       await sendEmailVerification(unverifiedUser, {
-        url: window.location.origin + '/verify',
+        url: getVerifyRedirectUrl(),
         handleCodeInApp: true,
       })
       alert('Verification email sent again. Check your inbox and spam folder.')
