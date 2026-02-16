@@ -11,14 +11,15 @@ import {
 } from 'firebase/auth'
 import logo from './assets/logo_1.png'
 
-// Where to send users after they click the verification link in email (must match Firebase Authorized domains)
-const VERIFY_REDIRECT_ORIGIN =
-  import.meta.env?.VITE_VERIFY_ORIGIN?.replace?.(/\/$/, '') ||
-  (typeof window !== 'undefined' ? window.location.origin : null) ||
-  'https://sfu-connect.vercel.app'
+// Verification link in email must point to the live site, not localhost (Vite inlines import.meta.env at build time)
+const PRODUCTION_VERIFY_URL = 'https://sfu-connect.vercel.app/verify'
 
 function getVerifyRedirectUrl() {
-  return `${VERIFY_REDIRECT_ORIGIN}/verify`
+  const fromEnv = import.meta.env?.VITE_VERIFY_ORIGIN?.replace?.(/\/$/, '')
+  if (fromEnv) return `${fromEnv}/verify`
+  // In production build always use live site so the email link never points to localhost
+  if (import.meta.env.PROD) return PRODUCTION_VERIFY_URL
+  return typeof window !== 'undefined' ? `${window.location.origin}/verify` : PRODUCTION_VERIFY_URL
 }
 
 export function AuthenticationForm() {

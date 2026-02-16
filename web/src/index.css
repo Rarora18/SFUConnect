@@ -61,18 +61,18 @@ h1 {
 }
 
 
-/* Auth form: translucent box around login/register area */
+/* Auth form: translucent box (header maroon #7a2d2d, lighter/translucent) */
 .auth-box {
   width: 100%;
   max-width: 420px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(122, 45, 45, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 8px 32px rgba(122, 45, 45, 0.25);
 }
 
 /* Auth form: maroon focus ring to match site colors */
