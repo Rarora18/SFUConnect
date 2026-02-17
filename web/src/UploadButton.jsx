@@ -40,7 +40,7 @@ export default function UploadButton({ onSubmit, onClick }) {
         variant="filled"
         size="md"
         radius="md"
-        style={{ backgroundColor: '#7a4b2d', color: '#fff', minWidth: 180 }}
+        style={{ minWidth: 180 }}
         onClick={() => setIsOpen(true)}
       >
         Post

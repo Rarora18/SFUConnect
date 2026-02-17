@@ -1,5 +1,4 @@
-import { ActionIcon, Badge, Button, Card, Group, Image, SimpleGrid, Text } from '@mantine/core'
-import { FiHeart } from 'react-icons/fi'
+import { Badge, Button, Card, Group, Image, SimpleGrid, Text } from '@mantine/core'
 import { auth } from './firebase'
 import badgeCardClasses from './BadgeCard.module.css'
 import classes from './CarouselCard.module.css'
@@ -12,20 +11,21 @@ const categoryLabels = {
   Library: 'Library',
 }
 
-function PostCard({ image, title, category, ownerName, ownerMeta, onMessageClick }) {
+function PostCard({ image, title, category, ownerName, ownerMeta, onMessageClick, isOwnPost }) {
   const locationLabel = categoryLabels[category] ?? category
   const metaLine = ownerMeta && (ownerMeta.major || ownerMeta.year || ownerMeta.gender)
     ? [ownerMeta.major, ownerMeta.year, ownerMeta.gender].filter(Boolean).join(' • ')
     : null
 
   const features = [
-    { emoji: '📍', label: locationLabel },
     ...(ownerName ? [{ emoji: '👤', label: `Posted by ${ownerName}` }] : []),
     ...(metaLine ? [{ emoji: '🎓', label: metaLine }] : []),
   ]
 
+  const cardClassName = `${badgeCardClasses.card} ${classes.card}${isOwnPost ? ` ${badgeCardClasses.cardOwn}` : ''}`
+
   return (
-    <Card withBorder radius="md" p="md" className={`${badgeCardClasses.card} ${classes.card}`}>
+    <Card withBorder radius="md" p="sm" className={cardClassName}>
       <Card.Section>
         <div className={badgeCardClasses.imageWrapper}>
           <Image
@@ -38,47 +38,38 @@ function PostCard({ image, title, category, ownerName, ownerMeta, onMessageClick
         </div>
       </Card.Section>
 
-      <Card.Section className={`${badgeCardClasses.section} ${badgeCardClasses.cardBody}`} mt="md">
+      <Card.Section className={`${badgeCardClasses.section} ${badgeCardClasses.cardBody}`} mt="xs">
         <Group justify="center" mb="xs">
-          <Badge size="sm" variant="light" color="red">
+          <Badge size="sm" variant="light" color="red" className="card-badge">
             {locationLabel}
           </Badge>
         </Group>
-        <Text fz="sm" className={badgeCardClasses.description} lineClamp={4}>
+        <Text fz="sm" className={badgeCardClasses.description} lineClamp={3}>
           {title}
         </Text>
       </Card.Section>
 
       <Card.Section className={`${badgeCardClasses.section} ${badgeCardClasses.cardFooter}`}>
         <div className={badgeCardClasses.meetupDetailsBlock}>
-          <Text mt="md" className={badgeCardClasses.label} c="dimmed">
-            Meetup details
-          </Text>
           <Group gap={7} mt={5}>
             {features.map((badge) => (
-              <Badge key={badge.label} variant="light" color="red" leftSection={badge.emoji}>
+              <Badge key={badge.label} variant="light" color="red" leftSection={badge.emoji} className="card-badge">
                 {badge.label}
               </Badge>
             ))}
           </Group>
         </div>
-        <Group mt="md">
+        <Group mt="sm" className={badgeCardClasses.messageRow}>
         {onMessageClick ? (
           <Button
             radius="md"
+            className="card-message-btn"
             style={{ flex: 1, backgroundColor: '#7a2d2d' }}
             onClick={onMessageClick}
           >
             Message
           </Button>
-        ) : (
-          <Button radius="md" variant="light" color="gray" style={{ flex: 1 }} disabled>
-            Your post
-          </Button>
-        )}
-        <ActionIcon variant="default" radius="md" size={36} aria-label="Like">
-          <FiHeart className={badgeCardClasses.like} stroke={1.5} size={18} />
-        </ActionIcon>
+        ) : null}
         </Group>
       </Card.Section>
     </Card>
@@ -117,10 +108,12 @@ export default function CardsCarousel({ items, onMessage }) {
       typeof onMessage === 'function' &&
       ownerUid &&
       ownerUid !== currentUid
+    const isOwnPost = !!ownerUid && ownerUid === currentUid
     return {
       ...item,
       ownerName,
       ownerMeta: item.owner,
+      isOwnPost,
       onMessageClick: canMessage
         ? () =>
             onMessage({
@@ -133,7 +126,7 @@ export default function CardsCarousel({ items, onMessage }) {
   }
 
   return (
-    <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md" className={classes.grid}>
+    <SimpleGrid cols={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing="xl" className={classes.grid}>
       {postItems.map((item, index) => (
         <PostCard key={item.id ?? `post-${index}`} {...buildCardProps(item, index)} />
       ))}

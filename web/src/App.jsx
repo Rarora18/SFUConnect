@@ -18,6 +18,8 @@ import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
 import { getImageForLocation } from './locationImages'
 
+const THEME_KEY = 'sfuconnect-theme'
+
 function App() {
   const [page, setPage] = useState('home')
   const [otherUser, setOtherUser] = useState(null)
@@ -28,6 +30,21 @@ function App() {
   const [postsError, setPostsError] = useState('')
   const [isLoadingPosts, setIsLoadingPosts] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
+
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_KEY) || 'light'
+    } catch {
+      return 'light'
+    }
+  })
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme === 'dark' ? 'dark' : '')
+    try {
+      localStorage.setItem(THEME_KEY, theme)
+    } catch (_) {}
+  }, [theme])
 
   // Load posts
   useEffect(() => {
@@ -159,7 +176,7 @@ function App() {
       <Navigation onNavigate={handleNav} />
 
       <div className="page-content">
-        <AppHeader searchQuery={searchQuery} onSearchChange={setSearchQuery} onPostSubmit={handlePostSubmit} />
+        <AppHeader searchQuery={searchQuery} onSearchChange={setSearchQuery} onPostSubmit={handlePostSubmit} theme={theme} onThemeToggle={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} />
         <div className="board">
           <div className="board-main">
             <div className="carousel-wrapper">

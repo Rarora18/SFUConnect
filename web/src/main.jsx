@@ -7,6 +7,17 @@ import { RouterProvider } from 'react-router-dom'
 import './index.css'
 import { router } from './router'
 
+const savedTheme = (() => {
+  try {
+    return localStorage.getItem('sfuconnect-theme') || 'light'
+  } catch {
+    return 'light'
+  }
+})()
+if (savedTheme === 'dark') {
+  document.documentElement.setAttribute('data-theme', 'dark')
+}
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <MantineProvider theme={{ fontFamily: "Orbitron, sans-serif" }}>

@@ -17,10 +17,60 @@ html {
   color: #2b1e16;
   background-color: #f7f1e6;
 
+  /* Light theme (default) */
+  --app-bg: #f7f1e6;
+  --app-body-bg: #ffffff;
+  --app-text: #2b1e16;
+  --app-text-muted: #5c5349;
+  --app-card-bg: #fff;
+  --app-card-border: rgba(122, 75, 45, 0.35);
+  --app-card-shadow: 0 2px 8px rgba(58, 42, 31, 0.1);
+  --nav-bg: #7a2d2d;
+  --nav-shadow: 0 10px 24px rgba(122, 45, 45, 0.25);
+  --board-bg: #c38a5a;
+  --board-border: #7a4b2d;
+  --board-shadow: 0 20px 40px rgba(58, 42, 31, 0.25);
+  --rail-bg: #f3e4c7;
+  --rail-border: rgba(122, 91, 62, 0.4);
+  --rail-ink: #3a2a1f;
+  --rail-shadow: 0 10px 24px rgba(58, 42, 31, 0.18);
+  --auth-box-bg: rgba(122, 45, 45, 0.4);
+  --auth-box-border: rgba(255, 255, 255, 0.18);
+  --auth-focus: #7a2d2d;
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  color: #e8e2dc;
+  background-color: #2a2a2a;
+
+  --app-bg: #2a2a2a;
+  --app-body-bg: #2a2a2a;
+  --app-text: #e8e2dc;
+  --app-text-muted: #a89f94;
+  --app-card-bg: #7a2d2d;
+  --app-card-border: rgba(255, 255, 255, 0.2);
+  --app-card-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  --nav-bg: #000000;
+  --nav-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  --board-bg: #000000;
+  --board-border: #000000;
+  --board-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  --rail-bg: #222222;
+  --rail-border: rgba(122, 45, 45, 0.35);
+  --rail-ink: #e0d8d0;
+  --rail-shadow: 0 10px 24px rgba(0, 0, 0, 0.25);
+  --auth-box-bg: rgba(45, 21, 21, 0.85);
+  --auth-box-border: rgba(255, 255, 255, 0.12);
+  --auth-focus: #c44a4a;
+}
+[data-theme="dark"] body {
+  background-color: #2a2a2a !important;
 }
 
 a {
@@ -31,13 +81,20 @@ a {
 a:hover {
   color: #535bf2;
 }
+[data-theme="dark"] a {
+  color: rgba(255, 255, 255, 0.9);
+}
+[data-theme="dark"] a:hover {
+  color: #7a2d2d;
+}
 
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
   font-family: "Orbitron", sans-serif !important;
-  background: #ffffff;
+  background: var(--app-body-bg);
+  color: var(--app-text);
 }
 
 body::before {
@@ -67,26 +124,26 @@ h1 {
   max-width: 420px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
-  background: rgba(122, 45, 45, 0.4);
+  background: var(--auth-box-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 8px 32px rgba(122, 45, 45, 0.25);
+  border: 1px solid var(--auth-box-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
-/* Auth form: maroon focus ring to match site colors */
+/* Auth form: focus ring to match theme */
 .auth-form input:focus {
-  outline: 2px solid #7a2d2d;
+  outline: 2px solid var(--auth-focus);
   outline-offset: -2px;
 }
 
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme="dark"]) {
     color: #2b1e16;
     background-color: #f7f1e6;
   }
-  a:hover {
+  :root:not([data-theme="dark"]) a:hover {
     color: #7a4b2d;
   }
 }

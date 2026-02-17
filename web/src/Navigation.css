@@ -1,9 +1,5 @@
 :root {
   --rail-w: 72px; /* skinny */
-  --rail-bg: rgba(250, 244, 232, 0.92);
-  --rail-border: rgba(122, 91, 62, 0.25);
-  --rail-ink: #3a2a1f;
-  --rail-shadow: 0 12px 24px rgba(58, 42, 31, 0.12);
 }
 
 /* left rail container */
@@ -14,20 +10,20 @@
   transform: translateY(-50%);
   width: var(--rail-w);
   height: auto;
-  background: #f3e4c7;
-  border: 1px solid rgba(122, 91, 62, 0.4);
+  background: var(--rail-bg);
+  border: 1px solid var(--rail-border);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 40;
-  box-shadow: 0 10px 24px rgba(58, 42, 31, 0.18);
+  box-shadow: var(--rail-shadow);
   backdrop-filter: blur(10px);
   border-radius: 32px;
   padding: 14px 0;
   background-image:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.4), rgba(0, 0, 0, 0)),
-    radial-gradient(circle at 20% 20%, rgba(122, 91, 62, 0.12), transparent 40%),
-    radial-gradient(circle at 80% 80%, rgba(122, 91, 62, 0.1), transparent 45%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(0, 0, 0, 0)),
+    radial-gradient(circle at 20% 20%, rgba(122, 91, 62, 0.08), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(122, 91, 62, 0.06), transparent 45%);
   overflow: hidden;
 }
 
@@ -89,11 +85,21 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
 }
+[data-theme="dark"] .rail-btn:hover {
+  background: rgba(122, 45, 45, 0.35);
+  color: #fff;
+  box-shadow: 0 6px 14px rgba(122, 45, 45, 0.25);
+}
 
 .rail-btn.active {
   background: rgba(122, 45, 45, 0.14);
   border-color: rgba(122, 45, 45, 0.28);
   box-shadow: 0 6px 16px rgba(122, 45, 45, 0.2);
+}
+[data-theme="dark"] .rail-btn.active {
+  background: rgba(122, 45, 45, 0.4);
+  border-color: rgba(122, 45, 45, 0.5);
+  box-shadow: 0 6px 16px rgba(122, 45, 45, 0.3);
 }
 
 .rail-ico {

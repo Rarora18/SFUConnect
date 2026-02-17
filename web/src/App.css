@@ -4,9 +4,13 @@
   padding: 0;
   text-align: center;
 }
+[data-theme="dark"] #root {
+  background: var(--app-body-bg);
+  min-height: 100vh;
+}
 
 .carousel-wrapper {
-  max-width: 1000px;
+  max-width: 1280px;
   margin: 0;
   width: 100%;
 }
@@ -36,12 +40,12 @@
       transparent 4px,
       transparent 10px
     ),
-    #c38a5a;
-  border: 10px solid #7a4b2d;
+    var(--board-bg);
+  border: 10px solid var(--board-border);
   border-radius: 18px;
   padding: 24px;
   box-shadow:
-    0 20px 40px rgba(58, 42, 31, 0.25),
+    var(--board-shadow),
     inset 0 0 0 2px rgba(255, 255, 255, 0.08);
   margin-top: 12px;
   position: relative;
@@ -89,6 +93,9 @@
   margin-left: var(--rail-w, 0px);
   padding: 96px 1.5rem 2rem;
 }
+[data-theme="dark"] .page-content {
+  background: var(--app-body-bg);
+}
 
 @media (max-width: 640px) {
   .page-content {
@@ -109,7 +116,7 @@
 
 .top-nav {
   width: 100vw;
-  background: #7a2d2d;
+  background: var(--nav-bg);
   border-radius: 0;
   padding: 12px 18px;
   margin: 0;
@@ -117,7 +124,7 @@
   top: 0;
   left: 0;
   z-index: 200;
-  box-shadow: 0 10px 24px rgba(122, 45, 45, 0.25);
+  box-shadow: var(--nav-shadow);
 }
 
 .top-nav__content {
@@ -179,12 +186,60 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
+  gap: 12px;
   min-width: 0;
   margin-left: 10rem;
 }
 
+.top-nav__theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.12s ease;
+}
+.top-nav__theme-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+[data-theme="dark"] .top-nav__theme-btn:hover {
+  background: rgba(122, 45, 45, 0.6);
+  color: #fff;
+}
+
 .top-nav__actions .upload-button-wrap {
   margin: 0;
+}
+
+/* Light: brown Post button; dark: maroon red Post button */
+.top-nav__actions .upload-button-wrap button {
+  background-color: #7a4b2d !important;
+  color: #fff !important;
+}
+[data-theme="dark"] .top-nav__actions .upload-button-wrap button {
+  background-color: #7a2d2d !important;
+  color: #fff !important;
+}
+
+[data-theme="dark"] .card-message-btn {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .card-message-btn:hover {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+}
+[data-theme="dark"] .card-badge {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .top-nav__logo {
@@ -203,11 +258,16 @@
   margin: 0;
   font-size: 32px;
   line-height: 1.1;
+  color: #fff !important;
+}
+[data-theme="dark"] .top-nav__title {
+  color: #7a2d2d !important;
 }
 
 .top-nav__subtitle {
   margin-top: 4px;
-  opacity: 0.85;
+  opacity: 0.9;
+  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 @media (max-width: 640px) {
@@ -273,6 +333,9 @@
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
+}
+[data-theme="dark"] .logo:hover {
+  filter: drop-shadow(0 0 2em rgba(122, 45, 45, 0.8));
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
