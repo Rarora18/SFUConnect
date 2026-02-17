@@ -27,6 +27,7 @@ function App() {
   const [posts, setPosts] = useState([])
   const [postsError, setPostsError] = useState('')
   const [isLoadingPosts, setIsLoadingPosts] = useState(true)
+  const [searchQuery, setSearchQuery] = useState('')
 
   // Load posts
   useEffect(() => {
@@ -96,10 +97,19 @@ function App() {
   }
 
   // Resolve images from location so they work in production (stored URLs can be dev-only paths)
-  const carouselItems = posts.map((post) => ({
-    ...post,
-    image: getImageForLocation(post.category ?? post.location) ?? post.image,
-  }))
+  const carouselItems = posts
+    .map((post) => ({
+      ...post,
+      image: getImageForLocation(post.category ?? post.location) ?? post.image,
+    }))
+    .filter((post) => {
+      if (!searchQuery.trim()) return true
+      const q = searchQuery.trim().toLowerCase()
+      const title = (post.title ?? '').toLowerCase()
+      const category = (post.category ?? post.location ?? '').toLowerCase()
+      const ownerName = (post.owner?.displayName ?? post.owner?.name ?? '').toLowerCase()
+      return title.includes(q) || category.includes(q) || ownerName.includes(q)
+    })
 
   const handleNav = (next) => {
     if (next === 'home') {
@@ -149,7 +159,7 @@ function App() {
       <Navigation onNavigate={handleNav} />
 
       <div className="page-content">
-        <AppHeader />
+        <AppHeader searchQuery={searchQuery} onSearchChange={setSearchQuery} onPostSubmit={handlePostSubmit} />
         <div className="board">
           <div className="board-main">
             <div className="carousel-wrapper">
@@ -165,8 +175,6 @@ function App() {
                   <span style={{ color: '#868e96' }}>Loading posts...</span>
                 </div>
               )}
-
-              <UploadButton onSubmit={handlePostSubmit} />
 
               <Carousel
                 items={carouselItems}
