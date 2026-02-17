@@ -26,6 +26,7 @@ export function AuthenticationForm() {
   const [type, toggle] = useToggle(['login', 'register'])
   const [showResend, setShowResend] = useState(false)
   const [unverifiedUser, setUnverifiedUser] = useState(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm({
     initialValues: {
@@ -47,6 +48,7 @@ export function AuthenticationForm() {
     const validation = form.validate()
     if (validation.hasErrors) return
 
+    setIsSubmitting(true)
     try {
       if (type === 'register') {
         const domain = values.email.split('@')[1]
@@ -100,6 +102,8 @@ export function AuthenticationForm() {
       setShowResend(false)
       setUnverifiedUser(null)
       alert(err.message)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -261,19 +265,27 @@ export function AuthenticationForm() {
           <div>
             <button
               type="submit"
-              className="flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7a2d2d]"
+              disabled={isSubmitting}
+              className="flex w-full justify-center items-center gap-2 rounded-md px-3 py-1.5 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#7a2d2d] disabled:opacity-80"
               style={{
                 lineHeight: 1.5,
                 backgroundColor: '#7a2d2d',
               }}
               onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = '#8a3d3d'
+                if (!isSubmitting) e.currentTarget.style.backgroundColor = '#8a3d3d'
               }}
               onMouseOut={(e) => {
                 e.currentTarget.style.backgroundColor = '#7a2d2d'
               }}
             >
-              {type === 'login' ? 'Sign in' : 'Register'}
+              {isSubmitting ? (
+                <>
+                  <span className="loading loading-spinner text-white" />
+                  {type === 'login' ? 'Signing in...' : 'Creating account...'}
+                </>
+              ) : (
+                type === 'login' ? 'Sign in' : 'Register'
+              )}
             </button>
           </div>
         </form>

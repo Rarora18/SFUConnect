@@ -6,7 +6,12 @@ export default function ProtectedRoute({ children }) {
   const user = useContext(AuthContext);
 
   if (user === undefined) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3">
+        <span className="loading loading-spinner text-error" />
+        <span className="text-sm opacity-70">Loading...</span>
+      </div>
+    );
   }
 
   if (!user) {

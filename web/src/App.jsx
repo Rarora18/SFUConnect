@@ -17,12 +17,6 @@ import Chat from './chat'
 import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
 import { getImageForLocation } from './locationImages'
-import gymImage from './assets/decorations/gym.jpeg'
-import mackenzieImage from './assets/decorations/mackenzie.jpg'
-import sryeImage from './assets/decorations/srye.jpg'
-import starbucksImage from './assets/decorations/starbucks.jpg'
-import subintImage from './assets/decorations/subint.jpg'
-import timsImage from './assets/decorations/tims.webp'
 
 function App() {
   const [page, setPage] = useState('home')
@@ -157,20 +151,6 @@ function App() {
       <div className="page-content">
         <AppHeader />
         <div className="board">
-          <aside className="board-notes board-notes--left" aria-label="Pinned photos left">
-            <div className="photo-note photo-note--tilt">
-              <div className="photo-note__pin" />
-              <img src={mackenzieImage} alt="Mackenzie Cafe" />
-            </div>
-            <div className="photo-note photo-note--tilt3">
-              <div className="photo-note__pin" />
-              <img src={gymImage} alt="Campus gym" />
-            </div>
-            <div className="photo-note photo-note--tilt2">
-              <div className="photo-note__pin" />
-              <img src={timsImage} alt="Tim Hortons" />
-            </div>
-          </aside>
           <div className="board-main">
             <div className="carousel-wrapper">
               {postsError && (
@@ -180,9 +160,10 @@ function App() {
               )}
 
               {isLoadingPosts && (
-                <p style={{ marginBottom: '12px', color: '#868e96' }}>
-                  Loading posts...
-                </p>
+                <div className="flex items-center justify-center gap-3 py-8" style={{ marginBottom: '12px' }}>
+                  <span className="loading loading-spinner text-error" />
+                  <span style={{ color: '#868e96' }}>Loading posts...</span>
+                </div>
               )}
 
               <UploadButton onSubmit={handlePostSubmit} />
@@ -202,20 +183,6 @@ function App() {
               />
             </div>
           </div>
-          <aside className="board-notes board-notes--right" aria-label="Pinned photos right">
-            <div className="photo-note photo-note--tilt2">
-              <div className="photo-note__pin" />
-              <img src={subintImage} alt="SUB interior" />
-            </div>
-            <div className="photo-note photo-note--tilt4">
-              <div className="photo-note__pin" />
-              <img src={starbucksImage} alt="Starbucks" />
-            </div>
-            <div className="photo-note photo-note--tilt5">
-              <div className="photo-note__pin" />
-              <img src={sryeImage} alt="Srye building" />
-            </div>
-          </aside>
         </div>
       </div>
     </>

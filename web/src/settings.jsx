@@ -159,7 +159,8 @@ export default function Settings() {
 
   if (loading) {
     return (
-      <Box p="xl">
+      <Box p="xl" className="flex min-h-[40vh] flex-col items-center justify-center gap-3">
+        <span className="loading loading-spinner text-error" />
         <Text c="dimmed">Loading...</Text>
       </Box>
     )

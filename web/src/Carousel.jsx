@@ -1,7 +1,7 @@
-import { Carousel } from '@mantine/carousel'
-import { Button, Paper, Text, Title, useMantineTheme } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { ActionIcon, Badge, Button, Card, Group, Image, SimpleGrid, Text } from '@mantine/core'
+import { FiHeart } from 'react-icons/fi'
 import { auth } from './firebase'
+import badgeCardClasses from './BadgeCard.module.css'
 import classes from './CarouselCard.module.css'
 
 const categoryLabels = {
@@ -12,63 +12,83 @@ const categoryLabels = {
   Library: 'Library',
 }
 
-// ⭐ Your Card component MUST be here
-function Card({ image, title, category, ownerName, ownerMeta, onMessageClick }) {
-  const cardStyle = image
-    ? { backgroundImage: `url(${image})` }
-    : { background: 'linear-gradient(135deg, #1f2937, #111827)' }
+function PostCard({ image, title, category, ownerName, ownerMeta, onMessageClick }) {
+  const locationLabel = categoryLabels[category] ?? category
+  const metaLine = ownerMeta && (ownerMeta.major || ownerMeta.year || ownerMeta.gender)
+    ? [ownerMeta.major, ownerMeta.year, ownerMeta.gender].filter(Boolean).join(' • ')
+    : null
+
+  const features = [
+    { emoji: '📍', label: locationLabel },
+    ...(ownerName ? [{ emoji: '👤', label: `Posted by ${ownerName}` }] : []),
+    ...(metaLine ? [{ emoji: '🎓', label: metaLine }] : []),
+  ]
 
   return (
-    <Paper
-      shadow="md"
-      p="xl"
-      radius="md"
-      style={cardStyle}
-      className={classes.card}
-    >
-      <div className={classes.cardContent}>
-        <Text className={classes.category} size="xs">
-          {categoryLabels[category] ?? category}
-        </Text>
+    <Card withBorder radius="md" p="md" className={`${badgeCardClasses.card} ${classes.card}`}>
+      <Card.Section>
+        <div className={badgeCardClasses.imageWrapper}>
+          <Image
+            src={image || undefined}
+            alt={title}
+            fallbackSrc="https://placehold.co/600x180/1f2937/9ca3af?text=No+image"
+            className={badgeCardClasses.image}
+            style={image ? {} : { background: 'linear-gradient(135deg, #1f2937, #111827)' }}
+          />
+        </div>
+      </Card.Section>
 
-        <Title order={3} className={classes.title}>
+      <Card.Section className={`${badgeCardClasses.section} ${badgeCardClasses.cardBody}`} mt="md">
+        <Group justify="center" mb="xs">
+          <Badge size="sm" variant="light" color="red">
+            {locationLabel}
+          </Badge>
+        </Group>
+        <Text fz="sm" className={badgeCardClasses.description} lineClamp={4}>
           {title}
-        </Title>
+        </Text>
+      </Card.Section>
 
-        {ownerName && (
-          <Text size="sm" mt={8} style={{ color: 'rgba(255,255,255,0.85)' }}>
-            Posted by {ownerName}
+      <Card.Section className={`${badgeCardClasses.section} ${badgeCardClasses.cardFooter}`}>
+        <div className={badgeCardClasses.meetupDetailsBlock}>
+          <Text mt="md" className={badgeCardClasses.label} c="dimmed">
+            Meetup details
           </Text>
+          <Group gap={7} mt={5}>
+            {features.map((badge) => (
+              <Badge key={badge.label} variant="light" color="red" leftSection={badge.emoji}>
+                {badge.label}
+              </Badge>
+            ))}
+          </Group>
+        </div>
+        <Group mt="md">
+        {onMessageClick ? (
+          <Button
+            radius="md"
+            style={{ flex: 1, backgroundColor: '#7a2d2d' }}
+            onClick={onMessageClick}
+          >
+            Message
+          </Button>
+        ) : (
+          <Button radius="md" variant="light" color="gray" style={{ flex: 1 }} disabled>
+            Your post
+          </Button>
         )}
-        {ownerMeta && (ownerMeta.major || ownerMeta.year || ownerMeta.gender) && (
-          <Text size="xs" mt={6} style={{ color: 'rgba(255,255,255,0.75)' }}>
-            {[ownerMeta.major, ownerMeta.year, ownerMeta.gender]
-              .filter(Boolean)
-              .join(' • ')}
-          </Text>
-        )}
-      </div>
-
-      {onMessageClick && (
-        <Button
-          variant="filled"
-          style={{ backgroundColor: '#7a2d2d', color: '#fff' }}
-          onClick={onMessageClick}
-        >
-          Message
-        </Button>
-      )}
-    </Paper>
+        <ActionIcon variant="default" radius="md" size={36} aria-label="Like">
+          <FiHeart className={badgeCardClasses.like} stroke={1.5} size={18} />
+        </ActionIcon>
+        </Group>
+      </Card.Section>
+    </Card>
   )
 }
 
 export default function CardsCarousel({ items, onMessage }) {
-  const theme = useMantineTheme()
-  const mobile = useMediaQuery(`(max-width: ${theme.breakpoints.sm})`)
-
   const currentUid = auth.currentUser?.uid
 
-  const carouselItems =
+  const postItems =
     items && items.length > 0
       ? items
       : [
@@ -80,8 +100,7 @@ export default function CardsCarousel({ items, onMessage }) {
           },
         ]
 
-  const slides = carouselItems.map((item, index) => {
-    // Support multiple shapes: owner.uid, owner (string), userId, ownerId (legacy)
+  const buildCardProps = (item, index) => {
     const ownerUid =
       item.owner?.uid ??
       (typeof item.owner === 'string' ? item.owner : null) ??
@@ -94,42 +113,30 @@ export default function CardsCarousel({ items, onMessage }) {
       item.displayName ??
       'User'
     const ownerPhoto = item.owner?.photoURL ?? item.owner?.photo ?? ''
-
     const canMessage =
       typeof onMessage === 'function' &&
       ownerUid &&
       ownerUid !== currentUid
-
-    return (
-      <Carousel.Slide key={item.id ?? `${item.title}-${index}`}>
-        <Card
-          {...item}
-          ownerName={ownerName}
-          ownerMeta={item.owner}
-          onMessageClick={
-            canMessage
-              ? () =>
-                  onMessage({
-                    uid: ownerUid,
-                    displayName: ownerName,
-                    photoURL: ownerPhoto,
-                  })
-              : undefined
-          }
-        />
-      </Carousel.Slide>
-    )
-  })
+    return {
+      ...item,
+      ownerName,
+      ownerMeta: item.owner,
+      onMessageClick: canMessage
+        ? () =>
+            onMessage({
+              uid: ownerUid,
+              displayName: ownerName,
+              photoURL: ownerPhoto,
+            })
+        : undefined,
+    }
+  }
 
   return (
-    <Carousel
-      slideSize="100%"
-      slideGap={2}
-      emblaOptions={{ align: 'start', slidesToScroll: 1 }}
-      nextControlProps={{ 'aria-label': 'Next slide' }}
-      previousControlProps={{ 'aria-label': 'Previous slide' }}
-    >
-      {slides}
-    </Carousel>
+    <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md" className={classes.grid}>
+      {postItems.map((item, index) => (
+        <PostCard key={item.id ?? `post-${index}`} {...buildCardProps(item, index)} />
+      ))}
+    </SimpleGrid>
   )
 }
