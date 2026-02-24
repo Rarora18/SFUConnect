@@ -135,14 +135,14 @@ export function AuthenticationForm() {
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             src={logo}
-            alt="SFUconnect"
+            alt="Huddled"
             className="mx-auto h-28 w-auto sm:h-36"
           />
           <p
             className="mt-3 text-center text-xl font-bold tracking-tight text-white sm:text-2xl"
             style={{ lineHeight: 1.25 }}
           >
-            SFUconnect
+            Huddled
           </p>
           <h2
             className="mt-8 text-center text-2xl font-bold tracking-tight text-white"

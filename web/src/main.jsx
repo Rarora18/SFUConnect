@@ -9,7 +9,7 @@ import { router } from './router'
 
 const savedTheme = (() => {
   try {
-    return localStorage.getItem('sfuconnect-theme') || 'light'
+    return localStorage.getItem('huddled-theme') || 'light'
   } catch {
     return 'light'
   }

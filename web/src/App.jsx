@@ -18,7 +18,7 @@ import Inbox from './inbox' // ✅ ADD
 import { db, auth } from './firebase'
 import { getImageForLocation } from './locationImages'
 
-const THEME_KEY = 'sfuconnect-theme'
+const THEME_KEY = 'huddled-theme'
 
 function App() {
   const [page, setPage] = useState('home')

@@ -1,8 +1,8 @@
-# SFUconnect
+# Huddled
 
-**Create and share meetups on campus.** SFUconnect is a mobile-friendly web app for Simon Fraser University students to post meetup ideas at campus locations and message each other in real time.
+**Create and share meetups on campus.** Huddled is a mobile-friendly web app for Simon Fraser University students to post meetup ideas at campus locations and message each other in real time.
 
-![SFUconnect](web/public/favicon.png)
+![Huddled](web/public/favicon.png)
 
 ---
 
@@ -129,4 +129,4 @@ MIT (or your chosen license.)
 
 ---
 
-**SFUconnect** — meet up on the mountain.
+**Huddled** — meet up on the mountain.

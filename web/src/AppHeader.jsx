@@ -1,5 +1,5 @@
 import React from 'react'
-import { Title, Text } from '@mantine/core'
+import { Title } from '@mantine/core'
 import logo from './assets/logo_1.png'
 import UploadButton from './UploadButton'
 
@@ -26,14 +26,11 @@ export default function AppHeader({ searchQuery = '', onSearchChange, onPostSubm
     <header className="top-nav">
       <div className="top-nav__content">
         <div className="top-nav__brand">
-          <img className="top-nav__logo" src={logo} alt="SFU Connect logo" />
+          <img className="top-nav__logo" src={logo} alt="Huddled logo" />
           <div className="top-nav__text">
             <Title order={2} c="white" className="top-nav__title">
-              SFU Connect
+              Huddled
             </Title>
-            <Text size="xs" c="white" className="top-nav__subtitle">
-              Create and share meetups on campus
-            </Text>
           </div>
         </div>
 
